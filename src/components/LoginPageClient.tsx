@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import { hasSupabasePublicEnv } from "@/lib/env/public";
 import { getAuthErrorMessage } from "@/lib/auth-errors";
 import { createClient } from "@/lib/supabase/client";
 import { ButtonColorful } from "@/components/ui/button-colorful";
 
 function hasSupabaseEnv() {
-  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  return hasSupabasePublicEnv();
 }
 
 function withTimeout<T>(promise: PromiseLike<T>, ms = 10000): Promise<T> {

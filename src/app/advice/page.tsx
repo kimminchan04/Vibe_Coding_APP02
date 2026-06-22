@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { AdviceList } from "@/components/AdviceList";
+import { hasSupabaseServerEnv } from "@/lib/env/server";
 import { DAILY_GOALS, generateAiAdvice } from "@/lib/nutrition-ai";
 import { createClient } from "@/lib/supabase/server";
 
 function hasSupabaseEnv() {
-  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  return hasSupabaseServerEnv();
 }
 
 export default async function AdvicePage() {

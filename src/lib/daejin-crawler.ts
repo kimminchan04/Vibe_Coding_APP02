@@ -1,11 +1,16 @@
 import type { CafeteriaMenu, MealType } from "@/types";
+import { getServerEnv } from "@/lib/env/server";
 import { FALLBACK_MENUS } from "./fallback-menus";
 
-const DAEJIN_MENU_URLS = [
-  process.env.DAEJIN_CAFETERIA_URL,
-  "https://www.daejin.ac.kr/kor/CMS/MenuMgr/menuListOnBuilding.do?mCode=MN215",
-  "https://www.daejin.ac.kr/kor/CMS/MenuMgr/menuList.do?mCode=MN215",
-].filter(Boolean) as string[];
+function getDaejinMenuUrls() {
+  const { daejinCafeteriaUrl } = getServerEnv();
+
+  return [
+    daejinCafeteriaUrl,
+    "https://www.daejin.ac.kr/kor/CMS/MenuMgr/menuListOnBuilding.do?mCode=MN215",
+    "https://www.daejin.ac.kr/kor/CMS/MenuMgr/menuList.do?mCode=MN215",
+  ].filter(Boolean) as string[];
+}
 
 function todayString() {
   return new Date().toISOString().slice(0, 10);
@@ -120,7 +125,7 @@ export async function fetchDaejinMenus(): Promise<{
   menus: CafeteriaMenu[];
   source: "crawler" | "fallback";
 }> {
-  for (const url of DAEJIN_MENU_URLS) {
+  for (const url of getDaejinMenuUrls()) {
     try {
       const menus = await crawlDaejinMenuPage(url);
       if (menus.length > 0) return { menus, source: "crawler" };

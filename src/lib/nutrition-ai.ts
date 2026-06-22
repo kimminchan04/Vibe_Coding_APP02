@@ -1,4 +1,5 @@
 import type { AiAdvice, NutritionInfo } from "@/types";
+import { getServerEnv } from "@/lib/env/server";
 
 type DailyTotals = {
   kcal: number;
@@ -93,14 +94,14 @@ function ruleBasedAdvice(nutrition: NutritionInfo, daily?: DailyTotals): AiAdvic
 }
 
 async function openAiAdvice(nutrition: NutritionInfo, menuName: string): Promise<string | null> {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) return null;
+  const { openaiApiKey } = getServerEnv();
+  if (!openaiApiKey) return null;
 
   try {
     const res = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${openaiApiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({

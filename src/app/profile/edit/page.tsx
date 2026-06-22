@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ProfileEditForm } from "@/components/ProfileEditForm";
+import { hasSupabaseServerEnv } from "@/lib/env/server";
 import { createClient } from "@/lib/supabase/server";
 
 function hasSupabaseEnv() {
-  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
+  return hasSupabaseServerEnv();
 }
 
 export default async function ProfileEditPage() {
