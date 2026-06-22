@@ -1,5 +1,5 @@
 import { HomeSearch } from "@/components/HomeSearch";
-import { fetchDaejinMenus } from "@/lib/bablabs";
+import { fetchDaejinMenus } from "@/lib/daejin-crawler";
 
 export default async function HomePage() {
   const { menus, source } = await fetchDaejinMenus();

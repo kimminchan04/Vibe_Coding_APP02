@@ -11,12 +11,12 @@
 | 플랫폼 | 모바일 우선 웹앱 (Next.js, Vercel) |
 | 핵심 사용자 | 대진대학교 재학생 |
 | 기술 스택 | Next.js, TypeScript, Tailwind CSS, Supabase, Vercel |
-| 외부 API | 밥대생 Open API (bablabs), 식품의약품안전처 식품영양성분DB (I2790) |
+| 외부 연동 | 대진대학교 학식 페이지 웹 크롤링, 메뉴명 기반 영양 분석 |
 
 ## 2. 목표
 
 1. 학식 메뉴 **검색**을 가장 빠르고 자연스러운 진입점으로 만든다.
-2. 식약처 API로 메뉴별 **영양·열량 정보**를 제공한다.
+2. 메뉴명 분석으로 메뉴별 **영양·열량 추정 정보**를 제공한다.
 3. 회원 기능과 AI 조언으로 **개인 맞춤 식단 관리**를 지원한다.
 
 ## 3. 핵심 기능
@@ -50,7 +50,7 @@
 ### 이번 버전에 만든다
 
 - F1. 학식 메뉴 검색 (밥대생 API + 대진대 샘플 데이터 폴백)
-- F2. 영양·열량 분석 (식약처 I2790 API)
+- F2. 영양·열량 분석 (메뉴명 기반 자체 분석)
 - F3. 회원가입·로그인 (Supabase Auth)
 - F4. AI 영양 조언 (규칙 기반 + OpenAI 연동 준비)
 
@@ -64,8 +64,8 @@
 | --- | --- | --- |
 | 사용자(profiles) | id, name, department, calorie_goal | Supabase Auth 연동 프로필 |
 | 식사 기록(meal_logs) | user_id, menu_name, calories, protein, logged_at | 본인이 먹은 학식 기록 |
-| 학식 메뉴(외부 API) | name, price, cafeteria, meal_type, date | 밥대생 API에서 조회 |
-| 영양 정보(외부 API) | kcal, protein, carbs, fat | 식약처 API에서 조회 |
+| 학식 메뉴(크롤링) | name, price, cafeteria, meal_type, date | 대진대학교 학식 페이지에서 조회 |
+| 영양 정보(자체 분석) | kcal, protein, carbs, fat | 메뉴명에서 주재료·조리법을 분석해 추정 |
 
 ## 6. 권한
 

@@ -18,7 +18,7 @@ export type NutritionInfo = {
   fat: number;
   sodium: number;
   servingSize: string;
-  source: "api" | "estimate";
+  source: "analysis" | "estimate";
 };
 
 export type AiAdvice = {
@@ -52,8 +52,4 @@ export const MEAL_TYPE_LABEL: Record<MealType, string> = {
   dinner: "석식",
 };
 
-export const CAFETERIA_LIST = [
-  "학생회관 식당",
-  "남자 기숙사 식당",
-  "여자 기숙사 식당",
-] as const;
+export const CAFETERIA_LIST = ["학생회관 식당", "남자 기숙사 식당", "여자 기숙사 식당"] as const;

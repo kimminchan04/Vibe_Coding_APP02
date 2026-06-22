@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { AdviceList } from "@/components/AdviceList";
 import { LogMealButton } from "@/components/LogMealButton";
 import { NutritionPanel } from "@/components/NutritionPanel";
-import { fetchDaejinMenus } from "@/lib/bablabs";
+import { fetchDaejinMenus } from "@/lib/daejin-crawler";
 import { extractSearchKeyword } from "@/lib/fallback-menus";
 import { fetchNutrition } from "@/lib/foodsafety";
 import { generateAiAdvice } from "@/lib/nutrition-ai";
@@ -56,12 +56,12 @@ export default async function MenuDetailPage({ params }: Props) {
     <div className="min-h-screen bg-bg">
       <header className="bg-primary px-5 py-4 text-white">
         <Link href="/" className="text-sm opacity-80">
-          ← 검색
+          ← 검색으로
         </Link>
         <h1 className="mt-2 text-lg font-bold leading-snug">{menu.name}</h1>
         <p className="mt-1 text-sm opacity-90">
           {menu.cafeteria} · {MEAL_TYPE_LABEL[menu.mealType]} ·{" "}
-          {menu.price.toLocaleString()}원
+          {menu.price > 0 ? `${menu.price.toLocaleString()}원` : "가격 정보 없음"}
         </p>
       </header>
 

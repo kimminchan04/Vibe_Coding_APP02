@@ -3,7 +3,7 @@ import "./globals.css";
 import { BottomNav } from "@/components/BottomNav";
 
 export const metadata: Metadata = {
-  title: "대진밥핏 — 대진대 학식 영양 분석",
+  title: "대진학식 영양알리미 - 대진대학교 학식 영양 분석",
   description: "대진대학교 학생을 위한 학식 메뉴 검색, 영양·열량 분석, AI 식단 조언",
 };
 

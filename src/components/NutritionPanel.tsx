@@ -13,13 +13,14 @@ export function NutritionPanel({ nutrition }: Props) {
   ];
 
   const total = nutrition.protein + nutrition.carbs + nutrition.fat || 1;
+  const sourceLabel = nutrition.source === "analysis" ? "메뉴명 분석" : "참고용 추정치";
 
   return (
     <div className="rounded-2xl bg-white p-5 shadow-sm">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between gap-3">
         <h2 className="text-lg font-bold">영양·열량</h2>
-        <span className="text-xs text-muted">
-          {nutrition.source === "api" ? "식약처 API" : "참고용 추정치"} · {nutrition.servingSize}
+        <span className="text-right text-xs text-muted">
+          {sourceLabel} · {nutrition.servingSize}
         </span>
       </div>
 
@@ -36,18 +37,9 @@ export function NutritionPanel({ nutrition }: Props) {
       </div>
 
       <div className="mb-2 flex h-3 overflow-hidden rounded-full">
-        <div
-          className="bg-success"
-          style={{ width: `${(nutrition.protein / total) * 100}%` }}
-        />
-        <div
-          className="bg-primary"
-          style={{ width: `${(nutrition.carbs / total) * 100}%` }}
-        />
-        <div
-          className="bg-warning"
-          style={{ width: `${(nutrition.fat / total) * 100}%` }}
-        />
+        <div className="bg-success" style={{ width: `${(nutrition.protein / total) * 100}%` }} />
+        <div className="bg-primary" style={{ width: `${(nutrition.carbs / total) * 100}%` }} />
+        <div className="bg-warning" style={{ width: `${(nutrition.fat / total) * 100}%` }} />
       </div>
       <div className="flex justify-between text-xs text-muted">
         <span>단백질</span>

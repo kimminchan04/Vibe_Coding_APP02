@@ -4,10 +4,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const tabs = [
-  { href: "/", label: "검색", icon: "🔍" },
-  { href: "/advice", label: "AI조언", icon: "💡" },
-  { href: "/logs", label: "내기록", icon: "📋" },
-  { href: "/profile", label: "프로필", icon: "👤" },
+  { href: "/", label: "검색", icon: "⌕" },
+  { href: "/advice", label: "AI 조언", icon: "!" },
+  { href: "/logs", label: "내 기록", icon: "□" },
+  { href: "/profile", label: "프로필", icon: "○" },
 ];
 
 export function BottomNav() {
@@ -16,7 +16,7 @@ export function BottomNav() {
   if (hidden) return null;
 
   return (
-    <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 border-t border-gray-200 bg-white">
+    <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-[480px] -translate-x-1/2 border-t border-accent/10 bg-white/95 backdrop-blur">
       <div className="flex">
         {tabs.map((tab) => {
           const active = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
@@ -25,10 +25,10 @@ export function BottomNav() {
               key={tab.href}
               href={tab.href}
               className={`flex flex-1 flex-col items-center gap-0.5 py-2 text-xs ${
-                active ? "font-semibold text-primary" : "text-muted"
+                active ? "font-semibold text-accent" : "text-muted"
               }`}
             >
-              <span className="text-lg">{tab.icon}</span>
+              <span className="text-base">{tab.icon}</span>
               {tab.label}
             </Link>
           );
