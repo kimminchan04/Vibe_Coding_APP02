@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { ButtonColorful } from "@/components/ui/button-colorful";
+import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 
 function hasSupabaseEnv() {
@@ -39,16 +41,13 @@ export default async function ProfilePage() {
         <main className="px-4 py-10 text-center">
           <div className="rounded-2xl bg-white p-6 shadow-sm">
             <p className="font-medium">프로필을 보려면 로그인이 필요해요</p>
-            <div className="mt-4 grid grid-cols-2 gap-2">
-              <Link href="/login" className="rounded-xl bg-accent py-3 font-semibold text-white">
-                로그인
+            <div className="mt-4 space-y-2">
+              <Link href="/login" className="block">
+                <ButtonColorful label="로그인" className="h-12 w-full rounded-xl" type="button" />
               </Link>
-              <Link
-                href="/signup"
-                className="rounded-xl bg-primary/10 py-3 font-semibold text-primary"
-              >
-                회원가입
-              </Link>
+              <Button variant="outline" className="h-11 w-full rounded-xl" asChild>
+                <Link href="/signup">회원가입</Link>
+              </Button>
             </div>
           </div>
         </main>
@@ -81,13 +80,19 @@ export default async function ProfilePage() {
             {profile?.calorie_goal ?? 2000}kcal · 단백질 {profile?.protein_goal ?? 60}g
           </p>
         </div>
+
+        <Link href="/profile/edit" className="block">
+          <ButtonColorful label="프로필 수정" className="h-12 w-full rounded-xl" type="button" />
+        </Link>
+
         <form action={signOut}>
-          <button
+          <Button
             type="submit"
-            className="w-full rounded-xl border border-accent/15 bg-white py-3 font-medium text-muted"
+            variant="outline"
+            className="h-11 w-full rounded-xl border-accent/15 text-muted"
           >
             로그아웃
-          </button>
+          </Button>
         </form>
       </main>
     </div>

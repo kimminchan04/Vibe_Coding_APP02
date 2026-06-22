@@ -2,13 +2,23 @@
 
 @theme {
   --color-primary: #00c4cc;
+  --color-primary-foreground: #ffffff;
   --color-accent: #7d2ae8;
+  --color-accent-foreground: #ffffff;
   --color-success: #12b886;
   --color-warning: #ff8a3d;
   --color-bg: #f7f4ff;
   --color-surface: #ffffff;
   --color-text: #171321;
   --color-muted: #756f86;
+  --color-background: #ffffff;
+  --color-foreground: #171321;
+  --color-secondary: #f0ebff;
+  --color-secondary-foreground: #171321;
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+  --color-input: #e8e2f4;
+  --color-ring: #7d2ae8;
   --font-sans: "Pretendard", system-ui, -apple-system, sans-serif;
 }
 

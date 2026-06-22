@@ -37,13 +37,20 @@ create table if not exists public.meal_logs (
 alter table public.meal_logs enable row level security;
 
 create policy "meal_logs_select_own" on public.meal_logs
-  for select using (auth.uid() = user_id);
+  for select to authenticated
+  using (auth.uid() = user_id);
 
 create policy "meal_logs_insert_own" on public.meal_logs
-  for insert with check (auth.uid() = user_id);
+  for insert to authenticated
+  with check (auth.uid() = user_id);
 
 create policy "meal_logs_delete_own" on public.meal_logs
-  for delete using (auth.uid() = user_id);
+  for delete to authenticated
+  using (auth.uid() = user_id);
+
+grant usage on schema public to authenticated;
+grant select, insert, delete on public.meal_logs to authenticated;
+grant select, insert, update on public.profiles to authenticated;
 
 -- 가입 시 프로필 자동 생성 (선택)
 create or replace function public.handle_new_user()

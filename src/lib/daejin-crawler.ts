@@ -125,7 +125,7 @@ export async function fetchDaejinMenus(): Promise<{
       const menus = await crawlDaejinMenuPage(url);
       if (menus.length > 0) return { menus, source: "crawler" };
     } catch {
-      // Try the next configured page, then fall back to local sample data.
+      // 다음 URL 시도
     }
   }
 

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { getAuthErrorMessage } from "@/lib/auth-errors";
 import { createClient } from "@/lib/supabase/client";
+import { ButtonColorful } from "@/components/ui/button-colorful";
 
 function hasSupabaseEnv() {
   return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
@@ -142,13 +143,12 @@ export function SignupPageClient() {
         />
       </div>
       {error && <p className="rounded-xl bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>}
-      <button
+      <ButtonColorful
         type="submit"
         disabled={loading}
-        className="w-full rounded-xl bg-accent py-3.5 font-semibold text-white disabled:opacity-60"
-      >
-        {loading ? "가입 중..." : "회원가입"}
-      </button>
+        label={loading ? "가입 중..." : "회원가입"}
+        className="h-12 w-full rounded-xl disabled:opacity-60"
+      />
       <p className="text-center text-sm text-muted">
         이미 계정이 있나요?{" "}
         <Link href="/login" className="font-semibold text-accent">

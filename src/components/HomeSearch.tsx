@@ -2,14 +2,16 @@
 
 import { useMemo, useState } from "react";
 import { MenuCard } from "@/components/MenuCard";
+import { useFavorites } from "@/hooks/use-favorites";
+import { isMenuAvailableToday, resolveFavoriteMenu } from "@/lib/favorites";
 import type { CafeteriaMenu } from "@/types";
 
 type Props = {
   menus: CafeteriaMenu[];
-  source: "crawler" | "fallback";
 };
 
 type SortKey = "date" | "price" | "cafeteria";
+type ViewMode = "all" | "favorites";
 
 const sortOptions: Array<{ key: SortKey; label: string }> = [
   { key: "date", label: "날짜순" },
@@ -26,24 +28,27 @@ function compareMenus(a: CafeteriaMenu, b: CafeteriaMenu, sortKey: SortKey) {
   return a.mealType.localeCompare(b.mealType);
 }
 
-export function HomeSearch({ menus, source }: Props) {
+export function HomeSearch({ menus }: Props) {
   const [query, setQuery] = useState("");
   const [sortKey, setSortKey] = useState<SortKey>("date");
+  const [viewMode, setViewMode] = useState<ViewMode>("all");
+  const { favorites, toggleFavorite, isFavorite } = useFavorites();
 
   const filtered = useMemo(() => {
+    const baseMenus = viewMode === "favorites" ? favorites.map((fav) => resolveFavoriteMenu(fav, menus)) : menus;
     const q = query.trim().toLowerCase();
     const result = !q
-      ? [...menus]
-      : menus.filter(
-          (m) =>
-            m.name.toLowerCase().includes(q) ||
-            m.cafeteria.toLowerCase().includes(q) ||
-            m.date.includes(q) ||
-            (m.corner?.toLowerCase().includes(q) ?? false),
+      ? [...baseMenus]
+      : baseMenus.filter(
+          (menu) =>
+            menu.name.toLowerCase().includes(q) ||
+            menu.cafeteria.toLowerCase().includes(q) ||
+            menu.date.includes(q) ||
+            (menu.corner?.toLowerCase().includes(q) ?? false),
         );
 
     return result.sort((a, b) => compareMenus(a, b, sortKey));
-  }, [menus, query, sortKey]);
+  }, [favorites, menus, query, sortKey, viewMode]);
 
   return (
     <div>
@@ -57,7 +62,7 @@ export function HomeSearch({ menus, source }: Props) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="메뉴, 식당, 날짜 검색"
-            className="w-full rounded-xl px-4 py-3.5 pr-10 text-text placeholder:text-muted"
+            className="w-full rounded-xl border border-black/25 bg-white px-4 py-3.5 pr-10 text-text placeholder:text-muted outline-none focus:border-black/50"
           />
           <span className="absolute right-3 top-1/2 -translate-y-1/2 text-lg text-accent">⌕</span>
         </div>
@@ -67,11 +72,37 @@ export function HomeSearch({ menus, source }: Props) {
         <div className="space-y-3">
           <div className="flex items-center justify-between gap-3">
             <h2 className="font-semibold">
-              {query ? `검색 결과 ${filtered.length}개` : "오늘의 학식"}
+              {viewMode === "favorites"
+                ? `즐겨찾기 ${filtered.length}개`
+                : query
+                  ? `검색 결과 ${filtered.length}개`
+                  : "오늘의 학식"}
             </h2>
-            <span className="text-xs text-muted">
-              {source === "crawler" ? "대진대 페이지 크롤링" : "샘플 데이터"}
-            </span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setViewMode("all")}
+              className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
+                viewMode === "all"
+                  ? "bg-accent text-white shadow-sm"
+                  : "bg-white text-muted ring-1 ring-accent/10"
+              }`}
+            >
+              전체 메뉴
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("favorites")}
+              className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
+                viewMode === "favorites"
+                  ? "bg-accent text-white shadow-sm"
+                  : "bg-white text-muted ring-1 ring-accent/10"
+              }`}
+            >
+              즐겨찾기 {favorites.length > 0 ? `(${favorites.length})` : ""}
+            </button>
           </div>
 
           <div className="grid grid-cols-3 gap-2">
@@ -84,7 +115,7 @@ export function HomeSearch({ menus, source }: Props) {
                   onClick={() => setSortKey(option.key)}
                   className={`rounded-xl px-3 py-2 text-sm font-semibold transition ${
                     active
-                      ? "bg-accent text-white shadow-sm"
+                      ? "bg-primary/10 text-primary ring-1 ring-primary/20"
                       : "bg-white text-muted ring-1 ring-accent/10"
                   }`}
                 >
@@ -95,13 +126,26 @@ export function HomeSearch({ menus, source }: Props) {
           </div>
         </div>
 
-        {filtered.length === 0 ? (
+        {viewMode === "favorites" && favorites.length === 0 ? (
+          <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
+            <p className="font-medium">즐겨찾은 메뉴가 없어요</p>
+            <p className="mt-1 text-sm text-muted">메뉴 카드의 별 아이콘을 눌러 추가해 보세요.</p>
+          </div>
+        ) : filtered.length === 0 ? (
           <div className="rounded-2xl bg-white p-8 text-center shadow-sm">
             <p className="font-medium">검색 결과가 없어요</p>
             <p className="mt-1 text-sm text-muted">다른 키워드를 입력해 보세요.</p>
           </div>
         ) : (
-          filtered.map((menu) => <MenuCard key={menu.id} menu={menu} />)
+          filtered.map((menu) => (
+            <MenuCard
+              key={`${menu.id}-${menu.name}`}
+              menu={menu}
+              isFavorite={isFavorite(menu)}
+              onToggleFavorite={toggleFavorite}
+              unavailable={viewMode === "favorites" && !isMenuAvailableToday(menu, menus)}
+            />
+          ))
         )}
       </main>
     </div>
